@@ -44,7 +44,65 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+ChatBot::ChatBot(const ChatBot& Hamada) // copy constructor
+{
+    std::cout << "ChatBot copy Constructor" << std::endl;
+    // Shallow copy, no meory allocation
+    _chatLogic = Hamada._chatLogic;
+    _rootNode = Hamada._rootNode;
+    // load image into heap memory
+    _image = new wxBitmap(*Hamada._image);
+}
+ChatBot& ChatBot::operator= (const ChatBot& Hamada) // copy assigment operator
+{
+    std::cout << "ChatBot copy assigment operator" << std::endl;
+    if (this != &Hamada)
+    {
+        // Shallow copy, no meory allocation
+        _chatLogic = Hamada._chatLogic;
+        _rootNode = Hamada._rootNode;
+        // use placement new operator
+        _image = new (_image) wxBitmap(*Hamada._image);
+        *_image = *Hamada._image;
+    }
+    else
+    {
 
+    }
+    return *this;
+}
+ChatBot::ChatBot(ChatBot&& Hamada) // move constructor
+{
+    std::cout << "ChatBot move Constructor" << std::endl;
+    this->_image = Hamada._image;
+    Hamada._image = nullptr;
+    this->_rootNode = Hamada._rootNode;
+    Hamada._rootNode = nullptr;
+    this->_chatLogic = Hamada._chatLogic;
+    Hamada._chatLogic = nullptr;
+    _chatLogic->SetChatbotHandle(this);
+}
+ChatBot& ChatBot::operator= (ChatBot&& Hamada)// move assigment operator
+{
+    std::cout << "ChatBot move assigment operator" << std::endl;
+    if (this != &Hamada)
+    {
+        delete _image;
+        _image = Hamada._image;
+        Hamada._image = nullptr;
+        _rootNode = Hamada._rootNode;
+        Hamada._rootNode = nullptr;
+        _chatLogic = Hamada._chatLogic;
+        Hamada._chatLogic = nullptr;
+        _chatLogic->SetChatbotHandle(this);
+    }
+    else
+    {
+        /* code */
+    }
+    
+    return *this;
+}
 ////
 //// EOF STUDENT CODE
 
